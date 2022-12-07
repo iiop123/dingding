@@ -17,22 +17,22 @@
 <table width="100%">
 <tr>
 <td width="50%">
-    <img src="https://img.giao111.workers.dev/api/img/fN3dbG" width="100%"/>
+    <img src="https://i.328888.xyz/2022/12/07/fU1yk.png" width="100%"/>
     <p>主页 </p>
 </td>
 <td width="50%">
-    <img src="https://img.giao111.workers.dev/api/img/YSah4n" width="100%"/>
+    <img src="https://i.328888.xyz/2022/12/07/fUQ8L.png" width="100%"/>
     <p>文件上传成功信息页</p>
 </td>
 
 </tr>
 <tr>
 <td width="50%">
-    <img src="https://img.giao111.workers.dev/api/img/N8NCG3" width="100%"/>
+    <img src="https://i.328888.xyz/2022/12/07/fUqqU.png" width="100%"/>
     <p>文件口令展示</p>
 </td>
 <td width="50%">
-    <img src="https://img.giao111.workers.dev/api/img/aw3Q7Y" width="100%"/>
+    <img src="https://i.328888.xyz/2022/12/07/fUYGp.png" width="100%"/>
     <p>文件分享二维码</p>
 </td>
 </tr>
@@ -61,3 +61,5 @@ kv_namespaces = [
 #最后执行publish推送到workers即可
  wrangler publish
 ```
+>### 关于后台
+#### 可以访问 /list.html 页面查看已经上传的数据，密码为123 可以在 src/index.js文件中修改密码
