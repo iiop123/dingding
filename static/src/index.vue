@@ -216,7 +216,7 @@ export default{
         <li @click="(this.page_status=false)" class="iconfont icon-shanchu del" ></li>
     
         <div style="margin-top: 10px;
-    font-size: x-large; 
+    font-size: x-large;
     font-weight: 900;">请输入取件码</div>
         <div class="mdui-textfield mdui-textfield-floating-label" style="margin-top: 15%;
     margin-bottom: 15%;">
@@ -228,11 +228,8 @@ export default{
 
 <!--rec_succ_page-->
       <div v-if="this.page_status=='code_succ_page'" class="mdui-shadow-6 msg card">
-        <li @click="(this.page_status==false)" class="iconfont icon-close del" ></li>
-        <div style="margin-top: 10px; 
-    font-size: large;
-    overflow-wrap: break-word;   
-    font-weight: 900;">{{this.rec_msg.name}}</div>
+        <li @click="(this.page_status=false)" class="iconfont icon-close del" ></li>
+        <div style="margin-top: 10px; font-size: large;overflow-wrap: break-word;font-weight: 900;">{{this.rec_msg.name}}</div>
     <span style="display: block; margin: 10px;">{{Math.floor(this.rec_msg.size/1024/1024*100)/100}} MB</span>
         <button @click="assign(this.rec_msg.url)" style="margin: 10px; border-radius: 10px;" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-indigo mdui-text-color-white" >
   <span>确认下载</span>
