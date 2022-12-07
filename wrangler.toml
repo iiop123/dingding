@@ -1,0 +1,9 @@
+name = "fileshare"
+main = "./src/index.js"
+compatibility_date = "2022-11-08"
+
+kv_namespaces = [
+  { binding = "LINK", id = "111",preview_id='111'}
+]
+[site]
+bucket = "./static/dist"
