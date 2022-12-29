@@ -1,9 +1,9 @@
-name = "fileshare"
+name = "uvasjk"
 main = "./src/index.js"
 compatibility_date = "2022-11-08"
 
 kv_namespaces = [
-  { binding = "LINK", id = "111",preview_id='111'}
+  { binding = "LINK", id = "c7a447933f364bc0bf4f34750a7284ef",preview_id='c7a447933f364bc0bf4f34750a7284ef'}
 ]
 [site]
 bucket = "./static/dist"

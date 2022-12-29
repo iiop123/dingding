@@ -25,8 +25,8 @@ export default{
             this.list=succ.keys.filter((e)=>{
               return e.metadata.date!=null
             })
+            this.auth=false
             this.list.sort((a,b)=>{
-              this.auth=false
               return b.metadata.date-a.metadata.date
             })
             
