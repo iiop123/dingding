@@ -3,17 +3,21 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import 'vue-waterfall-plugin-next/style.css'
 import QrcodeVue from 'qrcode.vue'
+import 'https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js'
+
 import 'animate.css';
+
+import axios from 'axios'
 import { nextTick } from 'vue';
 export default{
     data(){
         return{
-        file_info:[],
+        file_info:{},
         //...
-        status:false,//加载动画控制
         list_s:false,//文件列表控制
         //....
         page_status:false,
+        prog:{},
         //........
         over_page:false,//拖拽上传背景控制
         //......
@@ -76,37 +80,48 @@ export default{
     },
     methods:{
     file(){
+      let that=this
       let file_id=this.$refs.inp
       this.list_s=true
-      for (let i = 0; i < file_id.files.length; i++) {
-        if (file_id.files[i].size > 26214400) {
-          return alert('文件大于25MB')
+
+      for (let i = 0; i < file_id.files.length; i++){
+        if (file_id.files[i].size>26214400) {
+          mdui.alert('文件大于25MB')
+          continue
+    
+        }else up(file_id.files[i],i)
+      }
+        
+      function up (file,i){
+        let form=new FormData()
+        form.append('file',file)
+        
+        that.file_info[file.name]={
+          name:file.name
         }
+        that.file_info[file.name]['size']=file.size
+        axios(
+          {
+            url:'/api',
+            method:'post',
+            data:form,
+            onUploadProgress({loaded, total, progress, bytes, estimated, rate, upload = true}){
+              that.file_info[file.name]['prog']=progress.toFixed(2)*100
+            }
+
+          }
+        ).then(res=>{
+          that.file_info[file.name]['url']=res.data.msg.link
+          that.file_info[file.name]['code']=res.data.msg.code
+          document.getElementById(`progress_${file.name}`).style.display='none'
+          document.getElementById(`button_${file.name}`).style.display='table-cell'
+        }).catch(
+      ()=>{
+        mdui.alert('上传失败')
+        delete that.file_info[file.name]
       }
-      let form=new FormData()
-        for (let i = 0; i < file_id.files.length; i++) {
-          form.append('file',file_id.files[i])
-          this.status=true
-      }
-      
-      setTimeout(()=>{
-      fetch('/api',{
-      method:'POST',
-      body:form
-    }).then((e)=>{
-      if (e.ok) {
-        return e.json()
-      }else{
-        throw e
-      }
-    }).then((re)=>{
-      this.status=false
-      this.list_s=true
-      for (let i = 0; i < re.msg.length; i++) {
-        this.file_info.push(re.msg[i])
-      }
-    })
-  },600)      
+    )
+  }    
     },
     assign(e){
       window.location.assign(e)
@@ -134,36 +149,48 @@ export default{
       drop_upload(e){
       const data=e.dataTransfer.files
       this.list_s=true
+      let that=this
       this.over_page=false
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].size > 26214400) {
-          return alert('文件大于25MB')
+   
+      for (let i = 0; i < data.length; i++){
+        if (data[i].size>26214400) {
+          mdui.alert('文件大于25MB')
+          continue
+    
+        }else up(data[i],i)
+      }
+        
+      function up (file,i){
+        let form=new FormData()
+        form.append('file',file)
+        
+        that.file_info[file.name]={
+          name:file.name
         }
+        that.file_info[file.name]['size']=file.size
+        axios(
+          {
+            url:'/api',
+            method:'post',
+            data:form,
+            onUploadProgress({loaded, total, progress, bytes, estimated, rate, upload = true}){
+              that.file_info[file.name]['prog']=progress.toFixed(2)*100
+              
+            }
+
+          }
+        ).then(res=>{
+          that.file_info[file.name]['url']=res.data.msg.link
+          that.file_info[file.name]['code']=res.data.msg.code
+          document.getElementById(`progress_${file.name}`).style.display='none'
+          document.getElementById(`button_${file.name}`).style.display='block'
+        }).catch(
+      ()=>{
+        mdui.alert('上传失败')
+       delete that.file_info[file.name]
       }
-      let form=new FormData()
-        for (let i = 0; i < data.length; i++) {
-          form.append('file',data[i])
-          this.status=true
-      }
-      
-      setTimeout(()=>{
-      fetch('/api',{
-      method:'POST',
-      body:form
-    }).then((e)=>{
-      if (e.ok) {
-        return e.json()
-      }else{
-        throw e
-      }
-    }).then((re)=>{
-      this.status=false
-      this.list_s=true
-      for (let i = 0; i < re.msg.length; i++) {
-        this.file_info.push(re.msg[i])
-      }
-    })
-  },600)
+    )
+  }    
 
     },
   },
@@ -176,7 +203,8 @@ export default{
 <template>
   <div id="drag" style="position: fixed; inset:0;">
   <Transition name="loading">
-    <Loading :active="this.status" loader="bars" width="50" height="50" color="rgb(0,123,255)"></Loading>
+    <Loading :active="this.status" loader="bars" width="50" height="50" color="rgb(0,123,255)">
+    </Loading>
     </Transition>
   <div style="position: fixed; bottom: 0; left: 0; right: 0; top: 0; z-index: 999;" v-show="over_page">  
       <div style="background-color: white; opacity: 0.5; inset: 0; position: absolute;" ></div>
@@ -188,14 +216,15 @@ export default{
 </div>
 
     <div style="font-weight: 300; top:20%;" class="center" v-if="!list_s">
-      最大可上传25MB大小文件,存放时间为24H<br>
-      也可将文件拖拽上传
+      最大可上传25MB大小文件,存放时间为24H
+      <br>
+也可将文件拖拽上传
     </div>
     <TransitionGroup enter-active-class="animate__animated animate__zoomIn" leave-active-class="animate__animated animate__fadeOut">
       <!--qrcode-->
       <div v-if="this.page_status=='qrcode'" class="mdui-shadow-6 msg" >
         <li @click="(this.page_status=false)" class="iconfont icon-close" style="display: block;position: absolute;left: 100%;top: -15%;font-size: 25px;"></li>
-        <QrcodeVue size="95" :value="this.qr_val"></QrcodeVue>
+        <QrcodeVue size="120" :value="this.qr_val"></QrcodeVue>
       </div>
 
       <!--output_code_page-->
@@ -249,29 +278,34 @@ export default{
     </thead>
     <tbody>
       <TransitionGroup enter-active-class="animate__animated animate__fadeInRight">
-      <tr v-for="(value,index) in this.file_info" :key="index">
-        <td style="overflow-wrap: break-word;">
-          {{value.name}}
+      <tr v-for="(value,key,index) in this.file_info" :key="index">
+        <td style="overflow: hidden;">
+          {{key}}
         </td> 
-        <td style="overflow-wrap: normal;">
-          {{Math.floor(value.size/1024/1024*100)/100}} MB
+
+        <td style="overflow-wrap: normal;" :id="'size_'+key">
+          {{Math.floor(value['size']/1024/1024*100)/100}} MB
         </td> 
-        <td>
+        <td :id="`progress_${key}`">
+     <nut-progress :percentage="value['prog']" :text-inside="true"/>
+    </td>
+        <td :id="'button_'+key" style="display: none;">
             <button class="mdui-btn mdui-btn-raised mdui-color-indigo" style="position:relative;right:15px" :mdui-menu="`{target: '#share_${index}'}`">分享</button>
             <ul class="mdui-menu" :id="'share_'+index">
-                <li class="mdui-menu-item"  style="position:relative">
-                    <a href="javascript:;" @click="qrcode(value.link)" class="mdui-ripple">
-      <i class="iconfont icon-erweima icon"></i>二维码
-    </a>
-  </li>
+              
   <li class="mdui-menu-item" style="position:relative">
-                    <a href="javascript:;" @click="this.doCopy(value.link)" class="mdui-ripple">
+                    <a href="javascript:;" @click="this.doCopy(value['url'])" class="mdui-ripple">
       <i class="iconfont icon-link icon"></i>复制链接
     </a>
   </li>
   <li class="mdui-menu-item" style="position:relative">
-                    <a href="javascript:;" @click="this.share_code(value.code)" class="mdui-ripple">
+                    <a href="javascript:;" @click="this.share_code(value['code'])" class="mdui-ripple">
       <i class="iconfont icon-codev1 icon"></i>分享码
+    </a>
+  </li>
+  <li class="mdui-menu-item"  style="position:relative" >
+                    <a href="javascript:;" @click="qrcode(value['url'])" class="mdui-ripple">
+      <i class="iconfont icon-erweima icon"></i>二维码
     </a>
   </li>
   </ul>
@@ -297,6 +331,7 @@ export default{
 </div>
 </template>
 <style>
+@import url('https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css');
 @import url('//at.alicdn.com/t/c/font_3741384_czlnf1hfqo6.css');
 .drop_text:before{
   content: '+将文件拖到此处，即可上传';

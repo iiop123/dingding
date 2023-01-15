@@ -37,14 +37,10 @@ const pass='123'//默认登录密码
       let pathname = new URL(event.request.url)
       let asset= new RegExp('/assets/.*','i')
       let index=new RegExp('/index.*','i')
-      let test=new RegExp('/test.*','i')
       let list=new RegExp('/list.*','i')
-      if (asset.test(pathname.pathname)||index.test(pathname.pathname)||test.test(pathname.pathname)) {
+      if (asset.test(pathname.pathname)||index.test(pathname.pathname)||list.test(pathname.pathname)) {
         event.respondWith(handleEvent(event));
       }
-      if (list.test(pathname.pathname)) {
-        event.respondWith(handleEvent(event));
-      }  
     });
     //handle event
     async function handleEvent(event) {
@@ -61,10 +57,10 @@ const pass='123'//默认登录密码
 router.post(
     '/api', async ({req,res})=> {
       let form=req.body.formData()
-      const msg=[]
-      let file=(await form).getAll('file')
-      for (let i = 0; i < file.length; i++) {
-          let url=await randomString()
+      let msg
+      let file=(await form).get('file')
+      //检查取件码、链接合法性
+      let url=await randomString()
           let code=await randomnumber()
         let check=await LINK.get(url)
         if (check!==null) {
@@ -74,32 +70,33 @@ router.post(
         if (code_check!==null) {
           code=await randomnumber()
         }
-      let stream=file[i].stream()
+      let stream=file.stream()
       const exp=86400
       
         await LINK.put(url,stream,{
           expirationTtl: exp,
           metadata:{
-            size:file[i].size,
-            name:file[i].name,
+            size:file.size,
+            name:file.name,
             date:new Date().getTime(),
             link:req.url+'/file/'+url,
-            type:file[i].type
+            type:file.type
           },
         })
         await LINK.put(code,req.url+'/file/'+url,{
           expirationTtl: exp,
           metadata:{
-          size:file[i].size,
-          name:file[i].name}
+          size:file.size,
+          name:file.name}
         })
-        msg.push({name:file[i].name,
+        msg=
+        {name:file.name,
           time:new Date().getTime(),
-          size:file[i].size,
+          size:file.size,
           link:req.url+'/file/'+url,
           code:code
-        })
-    }
+        }
+
     res.body={msg:msg}
   }
   );

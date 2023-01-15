@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@nutui/nutui": "^4.0.0",
     "animate.css": "^4.1.1",
+    "axios": "^1.2.2",
     "qrcode.vue": "^3.3.3",
     "vue": "^3.2.41",
     "vue-clipboard2": "^0.3.3",

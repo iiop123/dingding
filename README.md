@@ -17,25 +17,16 @@
 <table width="100%">
 <tr>
 <td width="50%">
-    <img src="https://i.328888.xyz/2022/12/07/fU1yk.png" width="100%"/>
+    <img src="https://img.dingding.wtf/api/img/5KWGeW" width="100%"/>
     <p>主页 </p>
 </td>
 <td width="50%">
-    <img src="https://i.328888.xyz/2022/12/07/fUQ8L.png" width="100%"/>
+    <img src="https://img.dingding.wtf/api/img/yWRe4e" width="100%"/>
     <p>文件上传成功信息页</p>
 </td>
 
 </tr>
-<tr>
-<td width="50%">
-    <img src="https://i.328888.xyz/2022/12/07/fUqqU.png" width="100%"/>
-    <p>文件口令展示</p>
-</td>
-<td width="50%">
-    <img src="https://i.328888.xyz/2022/12/07/fUYGp.png" width="100%"/>
-    <p>文件分享二维码</p>
-</td>
-</tr>
+
 </table>
 
 > ### 如何使用 :tw-1f334:
