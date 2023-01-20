@@ -206,13 +206,9 @@ export default{
     <Loading :active="this.status" loader="bars" width="50" height="50" color="rgb(0,123,255)">
     </Loading>
     </Transition>
-  <div style="position: fixed; bottom: 0; left: 0; right: 0; top: 0; z-index: 999;" v-show="over_page">  
-      <div style="background-color: white; opacity: 0.5; inset: 0; position: absolute;" ></div>
-    <div style="border: dashed 2px; top: 50%; text-align: center; z-index: 999; width: 50%; height: 30%;" class="center">
-      <div style="text-align: center;padding-top: 10%;position: absolute;width: 100%;height: 100%;" class="drop_text">
-        
-    </div>
-    </div>
+  <div class="overlay flex_center" v-if="over_page">  
+      <div class="drop_text flex_center">
+      </div>
 </div>
 
     <div style="font-weight: 300; top:20%;" class="center" v-if="!list_s">
@@ -333,9 +329,7 @@ export default{
 <style>
 @import url('https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css');
 @import url('//at.alicdn.com/t/c/font_3741384_czlnf1hfqo6.css');
-.drop_text:before{
-  content: '+将文件拖到此处，即可上传';
-}
+
 .card{
   width: 40%;
   text-align: center;
@@ -346,11 +340,27 @@ export default{
     margin-right: 10%;
     font-size: 23px;
   }
-
-.over_page{
-  width: 100%;
-  height: 100%;
- 
+.drop_text{
+  border: dashed 2px;
+  border-radius: 10px;
+  width: 150px;
+  height: 150px;
+  color: white;
+  padding: 5px;
+  }
+.drop_text:before{
+  content: '+将文件拖到此处，即可上传';
+}
+.overlay{
+  background-color: rgba(0,0,0,.7);
+  z-index: 10;
+  position: fixed;
+  inset: 0;
+}
+.flex_center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .msg{
   position: absolute;
@@ -367,14 +377,7 @@ export default{
     left: 45%;
     font-size: 25px;
 }
-.loading-enter-active,
-.loading-leave-active {
-  transition: all 0.8s ease;
-}
-.loading-enter-from,
-.loading-leave-to {
-  opacity: 0;
-}
+
 .center{
   position: absolute;
   left: 50%;
