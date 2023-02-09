@@ -17,11 +17,11 @@
 <table width="100%">
 <tr>
 <td width="50%">
-    <img src="https://img.dingding.wtf/api/img/5KWGeW" width="100%"/>
+    <img src="https://f.pz.al/pzal/2023/02/09/3c020420b7b1d.jpg" width="100%"/>
     <p>主页 </p>
 </td>
 <td width="50%">
-    <img src="https://img.dingding.wtf/api/img/yWRe4e" width="100%"/>
+    <img src="https://f.pz.al/pzal/2023/02/09/e95544ff865f3.jpg" width="100%"/>
     <p>文件上传成功信息页</p>
 </td>
 
